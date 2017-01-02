@@ -31,6 +31,7 @@ void clear_network(Network** n){
   // loop through neurons
     for (j = 0;j < (*n)->layers[i].num; j++){
       free((*n)->layers[i].neurons[j].weights);
+      free((*n)->layers[i].neurons[j].new_weights);
     }
     free((*n)->layers[i].neurons);
   }
@@ -72,12 +73,36 @@ void feed_forward(Network* n, Vector* input) {
   }
 }
 
-double get_error(Network* n,double* expected){
+double get_error(Network* n,Vector* expected){
   double sum = 0;
   int i;
-  Layer* l = n->layers[n->num - 1];
-  for (i=0;i<l->num){
-    sum += 0.5*pow(expected[i] - l->neurons[i].output);
+  Layer* l = &n->layers[n->num - 1];
+  for (i=0;i<l->num;i++){
+    int expec = (expected->size > i)?expected->elements[i]:0;
+    sum += 0.5*pow(expec - l->neurons[i].output,2);
   }
   return sum;
+}
+
+Vector* run_set(Network *n, Traning_set set) {
+  
+}
+
+void clear_vector(Vector* v){
+  v->size = 0;
+  free(v->elements);
+  v->elements = NULL;
+}
+
+void clear_traning_set(Traning_set* set){
+  int i;
+  for (i = 0;i < set->num;i++){
+    clear_vector(&set->inputs[i]);
+    clear_vector(&set->expected[i]);
+  }
+  free(set->inputs);
+  free(set->expected);
+  set->inputs = NULL;
+  set->expected = NULL;
+  set->num = 0;
 }

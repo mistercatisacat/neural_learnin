@@ -34,6 +34,8 @@ Network* read_network(char filename[]) {
                                 n->layers[n->num -1].neurons[i].num = n->layers[n->num - 2].num;
                                 n->layers[n->num -1].neurons[i].weights = malloc(sizeof(double) *
                                                                                  n->layers[n->num -1].neurons[i].num);
+                                n->layers[n->num -1].neurons[i].new_weights = malloc(sizeof(double) *
+                                                                                n->layers[n->num -1].neurons[i].num);
                               //  printf("prev\n");
                         }
                 }else{
@@ -95,4 +97,77 @@ void read_weights(Network *n, char filename[]) {
       }
     }
   }
+  fclose(f);
+}
+
+
+Vector read_vector(char filename[]){
+  FILE* f = fopen(filename,"r");
+  Vector v;
+  v.size = 0;
+  v.elements = NULL;
+  char buffer[BUFF_SIZE];
+  double* data = NULL;
+  int size = 0;
+  if (f == NULL)
+    return v;
+
+
+  while (fgets(buffer,BUFF_SIZE - 1,f) != NULL){
+    size++;
+    data = realloc(data, sizeof(Vector) * size);
+    sscanf(buffer, " %lf", &(data[size-1]));
+  }
+
+  v.size = size;
+  v.elements = data;
+  fclose(f);
+  return v;
+}
+
+Traning_set read_traning_set(char filename[], int num, int input_size, int expected_size) {
+  Traning_set set;
+  FILE* f = fopen(filename, "r");
+  int i,j;
+  if (f == NULL){
+    set.num = 0;
+    set.inputs = NULL;
+    set.expected = NULL;
+    return set;
+  }
+  set.num = num;
+  set.inputs = malloc(sizeof(Vector) * num);
+  set.expected = malloc(sizeof(Vector) * num);
+  for (i =0; i<num;i++){
+    double n;
+
+    set.inputs[i].size = input_size;
+    set.inputs[i].elements = malloc(sizeof(double) * input_size);
+
+    set.expected[i].size = expected_size;
+    set.expected[i].elements = malloc(sizeof(double) * expected_size);
+
+    // gets the input vector
+    for (j = 0; j<input_size; j++){
+      if (fscanf(f," %lf", &n) == 0){
+        // break the loop because no input was read
+        i = num;
+        j = input_size;
+      }else{
+        set.inputs[i].elements[j] = n;
+      }
+    }
+
+    // gets the expected vector
+    for (j = 0; j<input_size; j++){
+      if (fscanf(f," %lf", &n) == 0){
+        // break the loop because no input was read
+        i = num;
+        j = input_size;
+      }else{
+        set.expected[i].elements[j] = n;
+      }
+    }
+  }
+  fclose(f);
 }

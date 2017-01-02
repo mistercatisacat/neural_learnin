@@ -10,26 +10,30 @@ Network* n;
 
 int main(){
   init_functions();
-  char filename[] = "basic.net";
+  char filename[] = "not_basic.net";
   //int *p = malloc(sizeof(int));
  //free(NULL);
   Network* n = read_network(filename);
-  save_weights(n,"pre pre set");
+//  save_weights(n,"pre pre set");
 
   //read_weights(n,"test_weights");
-  save_weights(n,"pre set");
+//  save_weights(n,"pre set");
 
   init_weights(n);
-  save_weights(n,"post set");
+  save_weights(n,"not_basic_weights");
 
-  Vector v;
-  v.size = 1;
-  v.elements = malloc(sizeof(double) * v.size);
-  v.elements[0] = 4;
-  printf("pre feed %f\n", (n)->layers[n->num - 1].neurons[0].output);
-  feed_forward(n,&v);
-  printf("post feed %f\n", (n)->layers[n->num - 1].neurons[0].output);
+  Vector input;
+  Vector expected;
 
+  input = read_vector("nb.input");
+  expected = read_vector("nb.expected");
+
+//  printf("pre feed %f\n", (n)->layers[n->num - 1].neurons[0].output);
+  feed_forward(n,&input);
+//  printf("post feed %f\n", (n)->layers[n->num - 1].neurons[0].output);
+  printf("error: %f\n",get_error(n,&expected));
+  clear_vector(&input);
+  clear_vector(&expected);
   // do code with the data structure
   clear_network(&n);
 }
