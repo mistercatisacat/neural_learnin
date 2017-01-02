@@ -7,4 +7,7 @@ Network* read_network(char filename[]);
 void save_weights(Network *n, char filename[]);
 void read_weights(Network *n, char filename[]);
 
+double* read_inputs(char filename[]);
+double* read_expected(char filename[]);
+
 #endif

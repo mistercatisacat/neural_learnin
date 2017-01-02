@@ -32,4 +32,6 @@ void clear_network(Network** n);
 
 void feed_forward(Network* n, Vector* input);
 
+double get_error(Network *n, double expected);
+
 #endif

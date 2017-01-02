@@ -1,6 +1,7 @@
 #include "network.h"
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include "functions.h"
 
 
@@ -69,4 +70,14 @@ void feed_forward(Network* n, Vector* input) {
       }
     }
   }
+}
+
+double get_error(Network* n,double* expected){
+  double sum = 0;
+  int i;
+  Layer* l = n->layers[n->num - 1];
+  for (i=0;i<l->num){
+    sum += 0.5*pow(expected[i] - l->neurons[i].output);
+  }
+  return sum;
 }
