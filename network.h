@@ -41,7 +41,7 @@ void feed_forward(Network* n, Vector* input);
 
 double get_error(Network *n, Vector* expected);
 
-Vector* run_set(Network *n, Traning_set set);
+Vector run_set(Network *n, Traning_set set);
 
 void clear_vector(Vector* v);
 

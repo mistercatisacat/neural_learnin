@@ -133,6 +133,7 @@ Traning_set read_traning_set(char filename[], int num, int input_size, int expec
     set.num = 0;
     set.inputs = NULL;
     set.expected = NULL;
+    fprintf(stderr, "error oppening: %s\n",filename );
     return set;
   }
   set.num = num;
@@ -170,4 +171,5 @@ Traning_set read_traning_set(char filename[], int num, int input_size, int expec
     }
   }
   fclose(f);
+  return set;
 }

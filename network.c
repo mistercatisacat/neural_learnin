@@ -84,8 +84,16 @@ double get_error(Network* n,Vector* expected){
   return sum;
 }
 
-Vector* run_set(Network *n, Traning_set set) {
-  
+Vector run_set(Network *n, Traning_set set) {
+  int i;
+  Vector errors;
+  errors.size = set.num;
+  errors.elements = malloc(sizeof(double) * set.num);
+  for (i=0; i<set.num; i++){
+    feed_forward(n,&(set.inputs[i]));
+    errors.elements[i] = get_error(n,&(set.expected[i]));
+  }
+  return errors;
 }
 
 void clear_vector(Vector* v){
