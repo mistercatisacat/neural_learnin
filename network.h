@@ -3,6 +3,7 @@
 
 typedef struct {
   int num;
+  double input;
   double* weights;
   double* new_weights;
   double output;
@@ -41,7 +42,7 @@ void feed_forward(Network* n, Vector* input);
 
 double get_error(Network *n, Vector* expected);
 
-Vector run_set(Network *n, Traning_set set);
+Vector run_set(Network *n, Traning_set set, double learning_rate);
 
 void clear_vector(Vector* v);
 

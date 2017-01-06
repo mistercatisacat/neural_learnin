@@ -91,7 +91,7 @@ void read_weights(Network *n, char filename[]) {
           j =  n->layers[i].num;
           k = n->layers[i].neurons[j].num;
         }else{
-          printf("%s",buffer);
+        //  printf("%s",buffer);
           sscanf(buffer, " %lf",&(n->layers[i].neurons[j].weights[k]));
         }
       }

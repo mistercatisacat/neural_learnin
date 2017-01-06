@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <stdio.h>
 #include "functions.h"
-
-
+#include "back-prop1.h"
 
 void init_weights(Network* n) {
   srand(time(NULL));
@@ -54,8 +54,10 @@ void feed_forward(Network* n, Vector* input) {
       if (i == 0){
         // input was specifed for this specific neuron
         if (input->size > j){
+        //  n->layers[i].neurons[j].input = input->elements[j];
           n->layers[i].neurons[j].output = functions[f_type](input->elements[j]);
         }else{
+      //    n->layers[i].neurons[j].input = 0;
           n->layers[i].neurons[j].output = functions[f_type](0);
         }
       }else{ //rest of the layers. A sum needs to be calculated and weights multiplied
@@ -67,6 +69,7 @@ void feed_forward(Network* n, Vector* input) {
           sum += n->layers[i-1].neurons[k].output * curr->weights[k];
         }
         // pass the sum through the function
+      //  n->layers[i].neurons[j].input = sum + n->layers[i].bias;
         n->layers[i].neurons[j].output = functions[f_type](sum + n->layers[i].bias);
       }
     }
@@ -84,7 +87,7 @@ double get_error(Network* n,Vector* expected){
   return sum;
 }
 
-Vector run_set(Network *n, Traning_set set) {
+Vector run_set(Network *n, Traning_set set, double learning_rate) {
   int i;
   Vector errors;
   errors.size = set.num;
@@ -92,6 +95,8 @@ Vector run_set(Network *n, Traning_set set) {
   for (i=0; i<set.num; i++){
     feed_forward(n,&(set.inputs[i]));
     errors.elements[i] = get_error(n,&(set.expected[i]));
+//    printf("Prop_back i = %d\n",i);
+    prop_back(n, learning_rate, &(set.expected[i]));
   }
   return errors;
 }

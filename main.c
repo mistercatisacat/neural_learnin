@@ -9,7 +9,7 @@ Network* n;
 
 int main(){
   init_functions();
-  char filename[] = "basic.net";
+  char filename[] = "xor.net";
   //int *p = malloc(sizeof(int));
  //free(NULL);
   Network* n = read_network(filename);
@@ -19,22 +19,30 @@ int main(){
 //  save_weights(n,"pre set");
 
   init_weights(n);
-  save_weights(n,"basic_weights");
+ // read_weights(n,"xor_weights");
+
 
   //Vector input;
   //Vector expected;
 
 //  input = read_vector("nb.input");
   //expected = read_vector("nb.expected");
-
   Traning_set set = read_traning_set("basic_set", 4, 2, 1);
-  Vector errors = run_set(n,set);
-  int i = 0;
-  for (i = 0; i < errors.size;i++){
-    printf("error %d: %f\n",i, errors.elements[i]);
+
+
+
+  int k;
+  for (k =0 ;k<2000;k++){
+    Vector errors = run_set(n,set,0.5);
+    int i = 0;
+    for (i = 0; i < errors.size;i++){
+      printf("error %d: %f\n",i, errors.elements[i]);
+    }
+    clear_vector(&errors);
   }
 
-  clear_vector(&errors);
+  save_weights(n,"xor_weights");
+
   clear_traning_set(&set);
 
 //  printf("pre feed %f\n", (n)->layers[n->num - 1].neurons[0].output);
